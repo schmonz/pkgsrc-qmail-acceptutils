@@ -1,0 +1,30 @@
+diff --git Makefile Makefile
+index 2c03374..c7a1254 100644
+--- Makefile
++++ Makefile
+@@ -22,20 +22,16 @@ CONFLICTS+=		qmail<=1.03nb32
+ 
+ DJB_RESTRICTED=		no
+ BUILD_TARGET=		acceptutils
++INSTALL_TARGET=		acceptutils-install
+ 
+ USE_LANGUAGES=		c c99
+ 
+-ACCEPTUTILS=		authup checknotroot fixsmtpio reup \
+-			qmail-qfilter-addtlsheader
+-
++SUBST_CLASSES+=		destdir
++SUBST_STAGE.destdir=	pre-configure
++SUBST_FILES.destdir=	Makefile
++SUBST_SED.destdir=	-e 's|\(cp \$${ACCEPTUTILS_.*} \)|\1\$${DESTDIR}|g'
+ 
+ INSTALLATION_DIRS=	bin ${PKGMANDIR}/man8
+ 
+-do-install:
+-	for i in ${ACCEPTUTILS}; do					\
+-		${INSTALL_PROGRAM} ${WRKSRC}/$$i ${DESTDIR}${PREFIX}/bin/$$i; \
+-		${INSTALL_MAN} ${WRKSRC}/$$i.8 ${DESTDIR}${PREFIX}/${PKGMANDIR}/man8/$$i.8; \
+-	done
+-
+ .include "../../mk/djbware.mk"
+ .include "../../mk/bsd.pkg.mk"
